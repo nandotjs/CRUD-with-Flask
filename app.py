@@ -12,8 +12,8 @@ def create_task():
     new_task = Task(id=task_id_control, title=data['title'], description=data.get('description', ''))
     task_id_control += 1
     tasks.append(new_task)
-    return jsonify({'message': 'Task created successfully'}), 201
-    
+    return jsonify(new_task.to_dict()), 201 
+
 @app.route('/tasks/all', methods=['GET'])
 def get_all_tasks():
     task_list = [task.to_dict() for task in tasks]
@@ -48,6 +48,12 @@ def delete_task(id):
     tasks = [task for task in tasks if task.id != id]
     return jsonify({'message': 'Task deleted successfully'}), 200
 
+@app.route('/tasks/clear', methods=['POST'])
+def clear_tasks():
+    global tasks, task_id_control
+    tasks = []
+    task_id_control = 1
+    return jsonify({'message': 'All tasks cleared'}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)
