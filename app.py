@@ -26,7 +26,9 @@ def get_all_tasks():
 @app.route('/tasks/<int:id>', methods=['GET'])
 def get_task(id):
     task = next((task for task in tasks if task.id == id), None)
-    return jsonify(task.to_dict()) if task else jsonify({'message': 'Task not found'}), 404
+    if task:
+        return jsonify(task.to_dict()), 200  # Ensure correct status code and response
+    return jsonify({'message': 'Task not found'}), 404
 
 @app.route('/tasks/<int:id>', methods=['PUT'])
 def update_task(id):
